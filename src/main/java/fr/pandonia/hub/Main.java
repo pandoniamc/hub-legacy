@@ -1,12 +1,15 @@
 package fr.pandonia.hub;
 
 import fr.pandonia.hub.listeners.item.ItemDropListener;
+import fr.pandonia.hub.listeners.player.PlayerChatListener;
 import fr.pandonia.hub.listeners.player.PlayerConfigurationListener;
 import fr.pandonia.hub.listeners.player.PlayerSpawnListener;
+import fr.pandonia.hub.player.HubPlayerProvider;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.network.ConnectionManager;
 
 public class Main {
 
@@ -23,8 +26,12 @@ public class Main {
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(new ItemDropListener());
+        globalEventHandler.addListener(new PlayerChatListener());
         globalEventHandler.addListener(new PlayerConfigurationListener(instance));
         globalEventHandler.addListener(new PlayerSpawnListener());
+
+        ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+        connectionManager.setPlayerProvider(new HubPlayerProvider());
 
         MojangAuth.init();
 

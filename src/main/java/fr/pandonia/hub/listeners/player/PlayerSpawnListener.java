@@ -1,5 +1,6 @@
 package fr.pandonia.hub.listeners.player;
 
+import fr.pandonia.hub.player.HubPlayer;
 import fr.pandonia.hub.utils.ComponentUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -26,7 +27,7 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
     @Override
     public Result run(PlayerSpawnEvent event) {
-        Player player = event.getPlayer();
+        HubPlayer player = (HubPlayer) event.getPlayer();
 
         for (HotbarItem item : HotbarItem.values()) {
             player.getInventory().setItemStack(item.slot, item.asItemStack(player));
@@ -34,6 +35,18 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
         // Prevent the player from moving the items in the hotbar
         player.getInventory().addInventoryCondition(CANCEL_ITEM_MOVEMENT);
+
+        player.setDisplayName(player.getGroup().getCustomName(player.getUsername()));
+
+        // Player list
+        player.sendPlayerListHeaderAndFooter(
+                Component.text()
+                        .append(Component.text("Pandonia", NamedTextColor.BLUE, TextDecoration.BOLD))
+                        .appendNewline(),
+                Component.text()
+                        .appendNewline()
+                        .append(Component.text("mc.pandonia.fr", NamedTextColor.GRAY))
+        );
 
         return Result.SUCCESS;
     }
