@@ -53,8 +53,8 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
     private enum HotbarItem {
 
-        COMPASS(0, Material.COMPASS, "Menu principal", NamedTextColor.GREEN),
-        PROFILE(1, Material.PLAYER_HEAD, "Profil", NamedTextColor.GOLD) {
+        COMPASS(0, "Menu principal", NamedTextColor.GREEN, Material.COMPASS),
+        PROFILE(1, "Profil", NamedTextColor.GOLD, Material.PLAYER_HEAD) {
             @Override
             public ItemStack asItemStack(Player player) {
                 ItemStack item = super.asItemStack(player);
@@ -68,16 +68,16 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
                 return item;
             }
         },
-        COSMETICS(4, Material.CHEST, "Cosmétiques", NamedTextColor.LIGHT_PURPLE),
-        JUMP(7, Material.FEATHER, "Jump", NamedTextColor.YELLOW),
-        HUB_SELECTOR(8, Material.NETHER_STAR, "Hub", NamedTextColor.AQUA);
+        COSMETICS(4, "Cosmétiques", NamedTextColor.LIGHT_PURPLE, Material.CHEST),
+        JUMP(7, "Jump", NamedTextColor.YELLOW, Material.FEATHER),
+        HUB_SELECTOR(8, "Hub", NamedTextColor.AQUA, Material.NETHER_STAR);
 
         private final int slot;
-        private final Material material;
         private final String name;
         private final TextColor color;
+        private final Material material;
 
-        HotbarItem(int slot, Material material, String name, TextColor color) {
+        HotbarItem(int slot, String name, TextColor color, Material material) {
             this.slot = slot;
             this.material = material;
             this.name = name;

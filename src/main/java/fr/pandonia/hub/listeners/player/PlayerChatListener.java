@@ -1,8 +1,8 @@
 package fr.pandonia.hub.listeners.player;
 
-import fr.pandonia.hub.player.HubPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerChatEvent;
 
@@ -16,7 +16,7 @@ public class PlayerChatListener implements EventListener<PlayerChatEvent> {
     @Override
     public Result run(PlayerChatEvent event) {
         event.setChatFormat(e -> {
-            HubPlayer player = (HubPlayer) e.getPlayer();
+            Player player = e.getPlayer();
             String message = e.getMessage();
 
             //noinspection DataFlowIssue
