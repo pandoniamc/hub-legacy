@@ -1,6 +1,8 @@
 package fr.pandonia.hub;
 
-import fr.pandonia.hub.listeners.PlayerConfigurationListener;
+import fr.pandonia.hub.listeners.item.ItemDropListener;
+import fr.pandonia.hub.listeners.player.PlayerConfigurationListener;
+import fr.pandonia.hub.listeners.player.PlayerSpawnListener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceManager;
@@ -19,7 +21,9 @@ public class Main {
         instanceManager.registerInstance(instance);
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+        globalEventHandler.addListener(new ItemDropListener());
         globalEventHandler.addListener(new PlayerConfigurationListener(instance));
+        globalEventHandler.addListener(new PlayerSpawnListener());
 
         server.start(HOST, PORT);
     }

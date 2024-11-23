@@ -1,4 +1,4 @@
-package fr.pandonia.hub.listeners;
+package fr.pandonia.hub.listeners.player;
 
 import fr.pandonia.hub.Instance;
 import net.minestom.server.entity.Player;
