@@ -5,6 +5,7 @@ import fr.pandonia.hub.listeners.player.PlayerConfigurationListener;
 import fr.pandonia.hub.listeners.player.PlayerSpawnListener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.InstanceManager;
 
 public class Main {
@@ -24,6 +25,8 @@ public class Main {
         globalEventHandler.addListener(new ItemDropListener());
         globalEventHandler.addListener(new PlayerConfigurationListener(instance));
         globalEventHandler.addListener(new PlayerSpawnListener());
+
+        MojangAuth.init();
 
         server.start(HOST, PORT);
     }

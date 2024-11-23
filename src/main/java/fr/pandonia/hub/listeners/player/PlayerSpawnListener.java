@@ -6,11 +6,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.inventory.condition.InventoryCondition;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.HeadProfile;
 
 public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
@@ -26,7 +29,7 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
         Player player = event.getPlayer();
 
         for (HotbarItem item : HotbarItem.values()) {
-            player.getInventory().setItemStack(item.slot, item.asItemStack());
+            player.getInventory().setItemStack(item.slot, item.asItemStack(player));
         }
 
         // Prevent the player from moving the items in the hotbar
@@ -38,7 +41,20 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
     private enum HotbarItem {
 
         COMPASS(0, Material.COMPASS, "Menu principal", NamedTextColor.GREEN),
-        PROFILE(1, Material.PLAYER_HEAD, "Profil", NamedTextColor.GOLD),
+        PROFILE(1, Material.PLAYER_HEAD, "Profil", NamedTextColor.GOLD) {
+            @Override
+            public ItemStack asItemStack(Player player) {
+                ItemStack item = super.asItemStack(player);
+                PlayerSkin skin = player.getSkin();
+
+                if (skin != null) {
+                    // Should always be true as the server is in online mode
+                    item = item.with(ItemComponent.PROFILE, new HeadProfile(skin));
+                }
+
+                return item;
+            }
+        },
         COSMETICS(4, Material.CHEST, "Cosmétiques", NamedTextColor.LIGHT_PURPLE),
         JUMP(7, Material.FEATHER, "Jump", NamedTextColor.YELLOW),
         HUB_SELECTOR(8, Material.NETHER_STAR, "Hub", NamedTextColor.AQUA);
@@ -55,7 +71,7 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
             this.color = color;
         }
 
-        public ItemStack asItemStack() {
+        public ItemStack asItemStack(Player player) {
             return ItemStack.builder(material)
                     .customName(
                             ComponentUtils.stripItalic(
