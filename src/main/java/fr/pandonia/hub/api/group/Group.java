@@ -31,6 +31,10 @@ public enum Group {
         this.name = name;
     }
 
+    public Component getCustomName() {
+        return Component.text(this.name, this.color);
+    }
+
     public Component getCustomName(String username) {
         return Component.text()
                 .append(Component.text(this.name).decorate(TextDecoration.BOLD))

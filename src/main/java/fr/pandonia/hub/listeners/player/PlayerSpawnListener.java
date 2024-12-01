@@ -2,9 +2,10 @@ package fr.pandonia.hub.listeners.player;
 
 import fr.pandonia.hub.hotbar.HotbarItem;
 import fr.pandonia.hub.player.HubPlayer;
+import fr.pandonia.hub.sidebar.SidebarService;
+import fr.pandonia.hub.utils.Constants;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.inventory.condition.InventoryCondition;
@@ -14,6 +15,12 @@ import java.util.Map;
 public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
 
     private static final InventoryCondition CANCEL_ITEM_MOVEMENT = (player, slot, clickType, inventoryConditionResult) -> inventoryConditionResult.setCancel(true);
+
+    private final SidebarService sidebarService;
+
+    public PlayerSpawnListener(SidebarService sidebarService) {
+        this.sidebarService = sidebarService;
+    }
 
     @Override
     public Class<PlayerSpawnEvent> eventType() {
@@ -42,12 +49,15 @@ public class PlayerSpawnListener implements EventListener<PlayerSpawnEvent> {
         // Player list
         player.sendPlayerListHeaderAndFooter(
                 Component.text()
-                        .append(Component.text("Pandonia", NamedTextColor.BLUE, TextDecoration.BOLD))
+                        .append(Constants.NAME)
                         .appendNewline(),
                 Component.text()
                         .appendNewline()
-                        .append(Component.text("mc.pandonia.fr", NamedTextColor.GRAY))
+                        .append(Component.text(Constants.IP, NamedTextColor.GRAY))
         );
+
+        // Sidebar
+        sidebarService.addViewer(player);
 
         return Result.SUCCESS;
     }

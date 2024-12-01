@@ -2,9 +2,12 @@ package fr.pandonia.hub;
 
 import fr.pandonia.hub.api.game.GameService;
 import fr.pandonia.hub.api.game.GameServiceImpl;
+import fr.pandonia.hub.api.server.ServerService;
+import fr.pandonia.hub.api.server.ServerServiceImpl;
 import fr.pandonia.hub.listeners.item.ItemDropListener;
 import fr.pandonia.hub.listeners.player.*;
 import fr.pandonia.hub.player.HubPlayerProvider;
+import fr.pandonia.hub.sidebar.SidebarService;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.extras.MojangAuth;
@@ -25,6 +28,9 @@ public class Main {
         instanceManager.registerInstance(instance);
 
         GameService gameService = new GameServiceImpl();
+        ServerService serverService = new ServerServiceImpl(instance);
+
+        SidebarService sidebarService = new SidebarService(serverService);
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(new ItemDropListener());
@@ -32,8 +38,9 @@ public class Main {
         globalEventHandler.addListener(new PlayerBlockPlaceListener());
         globalEventHandler.addListener(new PlayerChatListener());
         globalEventHandler.addListener(new PlayerConfigurationListener(instance));
+        globalEventHandler.addListener(new PlayerDisconnectListener(sidebarService));
         globalEventHandler.addListener(new PlayerOpenGuiListener(gameService));
-        globalEventHandler.addListener(new PlayerSpawnListener());
+        globalEventHandler.addListener(new PlayerSpawnListener(sidebarService));
         globalEventHandler.addListener(new PlayerTeleportListener());
         globalEventHandler.addListener(new PlayerUseItemListener());
 
