@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     // Minestom
-    implementation("net.minestom:minestom-snapshots:bb7acc2e77")
+    implementation("net.minestom:minestom-snapshots:2065f63f82")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.13")

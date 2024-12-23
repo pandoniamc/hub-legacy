@@ -13,21 +13,21 @@ public class PlayerChatListener implements EventListener<PlayerChatEvent> {
         return PlayerChatEvent.class;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Override
     public Result run(PlayerChatEvent event) {
-        event.setChatFormat(e -> {
-            Player player = e.getPlayer();
-            String message = e.getMessage();
+        Player player = event.getPlayer();
+        String message = event.getRawMessage();
 
-            //noinspection DataFlowIssue
-            return Component.text()
+        event.setFormattedMessage(
+                Component.text()
                     .append(player.getDisplayName())
                     .appendSpace()
                     .append(Component.text("▪", NamedTextColor.DARK_GRAY))
                     .appendSpace()
                     .append(Component.text(message))
-                    .build();
-        });
+                    .build()
+        );
 
         return Result.SUCCESS;
     }
