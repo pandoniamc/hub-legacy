@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     // Minestom
-    implementation("net.minestom:minestom-snapshots:2065f63f82")
+    implementation("net.minestom:minestom-snapshots:1_21_4-4da5831880")
 
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.13")
@@ -37,7 +37,7 @@ java {
 tasks {
     jar {
         manifest {
-            attributes["Main-Class"] = "com.nolydia.lobby.Main"
+            attributes["Main-Class"] = "fr.pandonia.hub.Main"
         }
     }
 
