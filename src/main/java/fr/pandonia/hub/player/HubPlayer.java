@@ -1,6 +1,7 @@
 package fr.pandonia.hub.player;
 
-import fr.pandonia.hub.api.economy.Purse;
+import fr.pandonia.hub.api.player.PlayerData;
+import fr.pandonia.hub.api.player.Purse;
 import fr.pandonia.hub.api.group.Group;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
@@ -8,21 +9,19 @@ import net.minestom.server.network.player.PlayerConnection;
 
 public class HubPlayer extends Player {
 
-    private final Group group;
-    private final Purse purse;
+    private final PlayerData data;
 
-    public HubPlayer(PlayerConnection playerConnection, GameProfile gameProfile, Group group, Purse purse) {
+    public HubPlayer(PlayerConnection playerConnection, GameProfile gameProfile, PlayerData data) {
         super(playerConnection, gameProfile);
 
-        this.group = group;
-        this.purse = purse;
+        this.data = data;
     }
 
     public Group getGroup() {
-        return group;
+        return data.group();
     }
 
     public Purse getPurse() {
-        return purse;
+        return data.purse();
     }
 }

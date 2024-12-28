@@ -1,9 +1,14 @@
 package fr.pandonia.hub;
 
+import fr.pandonia.hub.api.configuration.PropertiesConfiguration;
 import fr.pandonia.hub.api.game.GameService;
 import fr.pandonia.hub.api.game.GameServiceImpl;
+import fr.pandonia.hub.api.player.PlayerService;
+import fr.pandonia.hub.api.player.PlayerServiceImpl;
 import fr.pandonia.hub.api.server.ServerService;
 import fr.pandonia.hub.api.server.ServerServiceImpl;
+import fr.pandonia.hub.api.sql.HikariConnectionProvider;
+import fr.pandonia.hub.api.sql.SqlCredentials;
 import fr.pandonia.hub.listeners.item.ItemDropListener;
 import fr.pandonia.hub.listeners.player.*;
 import fr.pandonia.hub.player.HubPlayerProvider;
@@ -13,11 +18,12 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 
-    private static final String HOST = "127.0.0.1";
-    private static final int PORT = 25565;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         MinecraftServer server = MinecraftServer.init();
@@ -27,7 +33,23 @@ public class Main {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         instanceManager.registerInstance(instance);
 
+        PropertiesConfiguration configuration = new PropertiesConfiguration();
+
+        try {
+            configuration.load();
+        } catch (Exception e) {
+            LOGGER.error("Failed to load configuration", e);
+        }
+
+        SqlCredentials sqlCredentials = SqlCredentials.fromConfiguration(configuration);
+
+        HikariConnectionProvider connectionProvider = new HikariConnectionProvider(sqlCredentials);
+        new Thread(connectionProvider::open).start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(connectionProvider::close));
+
         GameService gameService = new GameServiceImpl();
+        PlayerService playerService = new PlayerServiceImpl(connectionProvider);
         ServerService serverService = new ServerServiceImpl(instance);
 
         SidebarService sidebarService = new SidebarService(serverService);
@@ -45,10 +67,12 @@ public class Main {
         globalEventHandler.addListener(new PlayerUseItemListener());
 
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-        connectionManager.setPlayerProvider(new HubPlayerProvider());
+        connectionManager.setPlayerProvider(new HubPlayerProvider(playerService));
 
         MojangAuth.init();
 
-        server.start(HOST, PORT);
+        server.start(configuration.getServerHost(), configuration.getServerPort());
+
+        LOGGER.info("Server started on {}:{}", configuration.getServerHost(), configuration.getServerPort());
     }
 }

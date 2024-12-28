@@ -1,8 +1,8 @@
-package fr.pandonia.hub.api.economy;
+package fr.pandonia.hub.api.player;
 
 public class Purse {
 
-    private int coins;
+    private final int coins;
 
     public Purse(int coins) {
         this.coins = coins;

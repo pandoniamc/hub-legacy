@@ -16,6 +16,10 @@ dependencies {
     // Minestom
     implementation("net.minestom:minestom-snapshots:1_21_4-4da5831880")
 
+    // MySQL
+    implementation("com.zaxxer:HikariCP:6.2.1")
+    implementation("com.mysql:mysql-connector-j:9.1.0")
+
     // Logging
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.slf4j:slf4j-simple:2.0.13")
