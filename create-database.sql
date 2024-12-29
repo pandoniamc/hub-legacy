@@ -14,10 +14,11 @@ CREATE TABLE `groups`
 
 CREATE TABLE players
 (
-    id       VARCHAR(36)   NOT NULL
+    id       VARCHAR(36)             NOT NULL
         PRIMARY KEY,
-    group_id INT DEFAULT 1 NOT NULL,
-    coins    INT DEFAULT 0 NOT NULL,
+    group_id INT        DEFAULT 1    NOT NULL,
+    locale   VARCHAR(2) DEFAULT 'fr' NOT NULL,
+    coins    INT        DEFAULT 0    NOT NULL,
     CONSTRAINT players_groups_id_fk
         FOREIGN KEY (group_id) REFERENCES `groups` (id)
 );

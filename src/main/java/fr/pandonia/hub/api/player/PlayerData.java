@@ -1,7 +1,7 @@
 package fr.pandonia.hub.api.player;
 
-import fr.pandonia.hub.api.group.Group;
+import java.util.Locale;
 
-public record PlayerData(Group group, Purse purse) {
+public record PlayerData(Group group, Locale locale, Purse purse) {
 
 }

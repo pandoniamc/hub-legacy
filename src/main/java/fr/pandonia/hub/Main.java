@@ -58,6 +58,7 @@ public class Main {
         globalEventHandler.addListener(new ItemDropListener());
         globalEventHandler.addListener(new PlayerBlockInteractListener());
         globalEventHandler.addListener(new PlayerBlockPlaceListener());
+        globalEventHandler.addListener(new PlayerChangeLocaleListener(playerService));
         globalEventHandler.addListener(new PlayerChatListener());
         globalEventHandler.addListener(new PlayerConfigurationListener(instance));
         globalEventHandler.addListener(new PlayerDisconnectListener(sidebarService));

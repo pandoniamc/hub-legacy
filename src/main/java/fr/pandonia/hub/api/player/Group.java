@@ -1,4 +1,4 @@
-package fr.pandonia.hub.api.group;
+package fr.pandonia.hub.api.player;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

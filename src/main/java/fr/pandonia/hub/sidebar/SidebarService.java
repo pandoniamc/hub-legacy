@@ -2,6 +2,7 @@ package fr.pandonia.hub.sidebar;
 
 import fr.pandonia.hub.api.server.ServerService;
 import fr.pandonia.hub.player.HubPlayer;
+import fr.pandonia.hub.utils.ComponentUtils;
 import fr.pandonia.hub.utils.Constants;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -9,17 +10,13 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 public class SidebarService {
 
     private static final int SIDEBAR_LENGTH = 25;
-
-    private static final NumberFormat COINS_FORMAT = NumberFormat.getNumberInstance(Locale.FRANCE);
 
     private final ServerService serverService;
 
@@ -60,9 +57,7 @@ public class SidebarService {
                                 .appendSpace()
                                 .append(Component.text("▪", NamedTextColor.DARK_GRAY))
                                 .appendSpace()
-                                .append(Component.text(COINS_FORMAT.format(viewer.getPurse().getCoins()), NamedTextColor.YELLOW))
-                                .appendSpace()
-                                .append(Component.text("⛁", NamedTextColor.GOLD))
+                                .append(ComponentUtils.getCoins(viewer.getPurse().getCoins()))
                                 .build(), 6)
         );
         sidebar.createLine(blankLine(2, 5));

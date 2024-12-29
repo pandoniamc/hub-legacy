@@ -8,7 +8,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -25,23 +24,17 @@ public enum HotbarItem {
             MinecraftServer.getGlobalEventHandler().call(new PlayerOpenGuiEvent(player, PlayerOpenGuiEvent.GuiType.MAIN));
         }
     },
-    PROFILE( "Profil", NamedTextColor.DARK_AQUA, Material.PLAYER_HEAD) {
+    PROFILE("Profil", NamedTextColor.DARK_AQUA, Material.PLAYER_HEAD) {
         @Override
         public void use(Player player) {
             MinecraftServer.getGlobalEventHandler().call(new PlayerOpenGuiEvent(player, PlayerOpenGuiEvent.GuiType.PROFILE));
         }
 
+        @SuppressWarnings("DataFlowIssue")
         @Override
         public ItemStack asItemStack(Player player, DisplayType type) {
-            ItemStack item = super.asItemStack(player, type);
-            PlayerSkin skin = player.getSkin();
-
-            if (skin != null) {
-                // Should always be true as the server is in online mode
-                item = item.with(ItemComponent.PROFILE, new HeadProfile(skin));
-            }
-
-            return item;
+            return super.asItemStack(player, type)
+                    .with(ItemComponent.PROFILE, new HeadProfile(player.getSkin()));
         }
     },
     SHOP("Boutique", NamedTextColor.GOLD, Material.GOLD_INGOT) {
@@ -50,7 +43,7 @@ public enum HotbarItem {
             MinecraftServer.getGlobalEventHandler().call(new PlayerOpenGuiEvent(player, PlayerOpenGuiEvent.GuiType.SHOP));
         }
     },
-    COSMETICS( "Cosmétiques", NamedTextColor.LIGHT_PURPLE, Material.CHEST) {
+    COSMETICS("Cosmétiques", NamedTextColor.LIGHT_PURPLE, Material.CHEST) {
         @Override
         public void use(Player player) {
             MinecraftServer.getGlobalEventHandler().call(new PlayerOpenGuiEvent(player, PlayerOpenGuiEvent.GuiType.COSMETICS));
@@ -59,6 +52,7 @@ public enum HotbarItem {
     JUMP("Jump", NamedTextColor.YELLOW, Material.FEATHER) {
         @Override
         public void use(Player player) {
+            player.closeInventory();
             player.teleport(player.getPosition().add(0, 5, 0));
         }
     },

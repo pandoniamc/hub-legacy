@@ -10,6 +10,14 @@ public record PlayerOpenGuiEvent(Player player, GuiType type) implements Event {
         PROFILE,
         SHOP,
         COSMETICS,
-        HUB_SELECTOR
+        HUB_SELECTOR,
+        FRIENDS,
+        GUILD,
+        PARTY,
+        BLOCKED_PLAYERS,
+        ACHIEVEMENTS,
+        CHALLENGES,
+        BOOSTERS,
+        SETTINGS,
     }
 }

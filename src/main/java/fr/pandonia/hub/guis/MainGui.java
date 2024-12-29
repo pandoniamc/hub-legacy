@@ -28,14 +28,16 @@ public class MainGui extends Gui {
     );
 
     public MainGui(Player player, Map<Game, Integer> playerCount) {
-        super(InventoryType.CHEST_6_ROW, "Menu principal", new Background(
-                new int[]{
-                        0, 1, 7, 8,
-                        9, 17,
-                        36, 44,
-                        45, 46, 52, 53
-                },
-                Material.GREEN_STAINED_GLASS_PANE)
+        super(InventoryType.CHEST_6_ROW, "Menu principal",
+                new Background(
+                        new int[]{
+                                0, 1, 7, 8,
+                                9, 17,
+                                36, 44,
+                                45, 46, 52, 53
+                        },
+                        Material.GREEN_STAINED_GLASS_PANE
+                )
         );
 
         setItemStack(4, ItemStack.builder(Material.OAK_SIGN)

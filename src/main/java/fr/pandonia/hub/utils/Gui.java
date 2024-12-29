@@ -1,5 +1,6 @@
 package fr.pandonia.hub.utils;
 
+import fr.pandonia.hub.events.PlayerOpenGuiEvent;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
@@ -14,7 +15,6 @@ import net.minestom.server.item.Material;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public abstract class Gui extends Inventory {
@@ -36,10 +36,10 @@ public abstract class Gui extends Inventory {
                     Player player = event.getPlayer();
                     int slot = event.getSlot();
 
-                    Optional.ofNullable(handlers.get(slot)).ifPresent(handler -> {
-                        player.closeInventory();
+                    Consumer<Player> handler = handlers.get(slot);
+                    if (handler != null) {
                         handler.accept(player);
-                    });
+                    }
 
                     event.setCancelled(true);
                 });
@@ -50,6 +50,10 @@ public abstract class Gui extends Inventory {
     public void setItemStack(int slot, ItemStack itemStack, Consumer<Player> handler) {
         setItemStack(slot, itemStack);
         handlers.put(slot, handler);
+    }
+
+    public void setItemStack(int slot, ItemStack itemStack, PlayerOpenGuiEvent.GuiType guiType) {
+        setItemStack(slot, itemStack, player -> MinecraftServer.getGlobalEventHandler().call(new PlayerOpenGuiEvent(player, guiType)));
     }
 
     public record Background(int[] slots, Material material) {
